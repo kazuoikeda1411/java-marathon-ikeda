@@ -1,18 +1,19 @@
 const express = require("express");
 const app = express();
 app.use(express.urlencoded({ extended: true }));
+const env = process.env;
 
-const port = 自分の社員番号;
+const port = 3508;
 
 const cors = require("cors");
 app.use(cors());
 
 const { Pool } = require("pg");
 const pool = new Pool({
-  user: "x", // PostgreSQLのユーザー名に置き換えてください
-  host: "localhost",
-  database: "x", // PostgreSQLのデータベース名に置き換えてください
-  password: "x", // PostgreSQLのパスワードに置き換えてください
+  user: "user_3508", // PostgreSQLのユーザー名に置き換えてください
+  host: "postgres",//エラー箇所（localhost→postgresに変更）
+  database: "crm_3508", // PostgreSQLのデータベース名に置き換えてください
+  password: "pass_3508", // PostgreSQLのパスワードに置き換えてください
   port: 5432,
 });
 
@@ -37,7 +38,7 @@ app.post("/add-customer", async (req, res) => {
   try {
     const { companyName, industry, contact, location } = req.body;
     const newCustomer = await pool.query(
-      "INSERT INTO customers (company_nam, industry, contact, location) VALUES ($1, $2, $3, $4) RETURNING *",
+      "INSERT INTO customers (company_name, industry, contact, location) VALUES ($1, $2, $3, $4) RETURNING *",
       [companyName, industry, contact, location]
     );
     res.json({ success: true, customer: newCustomer.rows[0] });
