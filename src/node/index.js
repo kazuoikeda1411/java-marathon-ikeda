@@ -31,6 +31,19 @@ app.get("/customers", async (req, res) => {
   }
 });
 
+//customer情報の検索処理
+app.get("/customer", async (req, res) => {
+  try {
+    // クエリパラメータの取得
+    const { companyName } = req.query;
+    const customerData = await pool.query("SELECT * FROM customers WHERE company_name = $1", [companyName]);
+    res.send(customerData.rows);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+});
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
