@@ -88,8 +88,8 @@ app.delete("/delete-customer", async (req, res) => {
 app.patch("/update-customer", async (req, res) => {
   try {
     // クエリパラメータの取得
-    const { companyName, industry, contact, location, customerId } = req.query;
-    const customerData = await pool.query("UPDATE customers SET company_name = $1, industry = $2, contact = $3, location = $4 WHERE customer_id = $5;", [companyName, industry, contact, location, customerId]);
+    const { companyName, industry, contact, location, customerId } = req.body;
+    const customerData = await pool.query("UPDATE customers SET company_name = $1, industry = $2, contact = $3, location = $4, updated_date = CURRENT_TIMESTAMP WHERE customer_id = $5;", [companyName, industry, contact, location, customerId]);
     res.json({ success: true });
   } catch (err) {
     console.error(err);

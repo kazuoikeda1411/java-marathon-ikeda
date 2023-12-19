@@ -76,7 +76,8 @@
                     if (data.success) {
                         alert('顧客情報が正常に変更されました。');
                         // 詳細画面に遷移
-                        //確認画面を閉じる
+                        const form = window.opener.location.href = `/customer/detail.html?companyName=${companyName}`;
+                        //確認画面を閉じる0
                         window.close();
                         // window.location.href = `/customer/detail.html?companyName=${companyName}`;
                     } else {
