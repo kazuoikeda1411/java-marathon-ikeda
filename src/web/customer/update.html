@@ -9,10 +9,67 @@
 </head>
 <body>
     <div class="container mt-5">
-        <!-- ここにHTMLを書く -->
+        <div class="container mt-5">
+            <h2 class="mb-4">顧客情報を編集してください</h2>
+            <form id="customer-form">
+                <div class="form-group">
+                    <label for="companyName">会社名:</label>
+                    <input type="text" class="form-control" id="companyName" name="companyName" required>
+                </div>
+                <div class="form-group">
+                    <label for="industry">業種:</label>
+                    <input type="text" class="form-control" id="industry" name="industry" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact">連絡先:</label>
+                    <input type="text" class="form-control" id="contact" name="contact" required>
+                </div>
+                <div class="form-group">
+                    <label for="location">所在地:</label>
+                    <input type="text" class="form-control" id="location" name="location" required>
+                </div>
+                <button type="submit" id="submitButton" class="btn btn-primary">確認</button>
+            </form>
+        </div>
     </div>
     <script type="module">
-        <!-- ここにJSを書く -->
+        import config from "../config.js";
+        const urlParams = new URLSearchParams(window.location.search);
+        const customerId = urlParams.get('customerId');
+        fetch(`${config.apiUrl}/customer-id?customerId=${customerId}`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                data.forEach((customer, index) => {
+                    document.getElementById("companyName").value = customer.company_name;
+                    document.getElementById("industry").value = customer.industry;
+                    document.getElementById("contact").value = customer.contact;
+                    document.getElementById("location").value = customer.location;
+                });
+            })
+            .catch((error) => console.error(error));
+
+        //確認ボタンが押されたとき
+        document.getElementById('submitButton').addEventListener('click', function (e) {
+            e.preventDefault();
+            const urlParams = new URLSearchParams(window.location.search);
+            const preCompanyName = urlParams.get('companyName');
+            const companyName = document.getElementById('companyName').value;
+            const industry = document.getElementById('industry').value;
+            const contact = document.getElementById('contact').value;
+            const location = document.getElementById('location').value;
+
+            // encodeURIComponent を使用して値をエンコード
+            const encodedPreCompanyName = encodeURIComponent(preCompanyName);
+            const encodedCompanyName = encodeURIComponent(companyName);
+            const encodedIndustry = encodeURIComponent(industry);
+            const encodedContact = encodeURIComponent(contact);
+            const encodedLocation = encodeURIComponent(location);
+
+            // データを別画面に渡して別画面を開く
+            window.open(`update-confirm.html?customerId=${customerId}&companyName=${encodedCompanyName}&industry=${encodedIndustry}&contact=${encodedContact}&location=${encodedLocation}`, '_blank');
+        })
     </script>
     <!-- BootstrapのJavaScriptの読み込み -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

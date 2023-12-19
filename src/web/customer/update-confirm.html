@@ -9,10 +9,83 @@
 </head>
 <body>
     <div class="container mt-5">
-        <!-- ここにHTMLを書く -->
+        <div class="container mt-5">
+            <h2>登録内容は以下で問題ないでしょうか？</h2>
+            <ul id="confirmationList"></ul>
+            <button type="button" id="confirmButton">送信</button><button id="cancelButton">キャンセル</button>
+        </div>
     </div>
     <script type="module">
-        <!-- ここにJSを書く -->
+        import config from '../config.js';
+        //画面表示の際に値を表示
+        window.onload = function () {
+            // URLからパラメータを取得
+            const urlParams = new URLSearchParams(window.location.search);
+
+            const companyName = urlParams.get('companyName');
+            const industry = urlParams.get('industry');
+            const contact = urlParams.get('contact');
+            const location = urlParams.get('location');
+
+            // データを表示
+            const confirmationList = document.getElementById('confirmationList');
+            appendListItem(confirmationList, `Company Name: ${companyName}`);
+            appendListItem(confirmationList, `Industry: ${industry}`);
+            appendListItem(confirmationList, `Contact: ${contact}`);
+            appendListItem(confirmationList, `Location: ${location}`);
+
+        }
+
+        // appendListItem 関数の定義
+        function appendListItem(list, text) {
+            const listItem = document.createElement('li');
+            listItem.textContent = text;
+            list.appendChild(listItem);
+        }
+
+        document.getElementById('confirmButton').addEventListener('click', function (e) {
+            e.preventDefault();
+            const urlParams = new URLSearchParams(window.location.search);
+
+            // 各パラメータの値を取得
+            const companyName = urlParams.get('companyName');
+            const industry = urlParams.get('industry');
+            const contact = urlParams.get('contact');
+            const location = urlParams.get('location');
+            const customerId = urlParams.get('customerId');
+            // FormData オブジェクトを生成
+            const formData = new FormData();
+
+            // パラメータを FormData に追加
+            formData.append('companyName', companyName);
+            formData.append('industry', industry);
+            formData.append('contact', contact);
+            formData.append('location', location);
+            formData.append('customerId', customerId);
+
+            // 登録処理を行い、成功ならメッセージを表示
+            fetch(config.apiUrl + '/update-customer', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams([...formData])
+            }).then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    if (data.success) {
+                        alert('顧客情報が正常に変更されました。');
+                        // 詳細画面に遷移
+                        //確認画面を閉じる
+                        window.close();
+                        // window.location.href = `/customer/detail.html?companyName=${companyName}`;
+                    } else {
+                        alert('保存に失敗しました。');
+                        window.close();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        })
     </script>
     <!-- BootstrapのJavaScriptの読み込み -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

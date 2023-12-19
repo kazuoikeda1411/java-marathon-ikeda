@@ -23,10 +23,15 @@
                 </tr>
             </thead>
             <tbody id="customer-list">
-                <!-- 顧客データはここに挿入されます -->
             </tbody>
         </table>
-        <button id="delete-button">削除</button>
+        <div>
+            <button id="update-button">編集</button>
+        </div>
+        <div>
+            <button id="delete-button">削除</button>
+        </div>
+
     </div>
 
     <script type="module">
@@ -35,7 +40,6 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const companyName = urlParams.get('companyName');
-        console.log("呼び出されました")
         fetch(`${config.apiUrl}/customer?companyName=${companyName}`)
             .then((response) => {
                 console.log(response); // ここでレスポンスオブジェクトをログに出力
@@ -63,6 +67,7 @@
                 });
             })
             .catch((error) => console.error(error));
+
         document.getElementById('delete-button').addEventListener('click', function () {
             // 確認メッセージを表示
             const confirmDelete = confirm('本当に削除しますか？');
@@ -86,6 +91,11 @@
                 // キャンセル時の処理
                 console.log('削除がキャンセルされました');
             }
+        });
+
+        document.getElementById('update-button').addEventListener('click', function () {
+            const customerId = document.querySelector("#customer-list tr:first-child td:first-child").textContent;
+            window.location.href = `/customer/update.html?customerId=${customerId}`;
         });
     </script>
 

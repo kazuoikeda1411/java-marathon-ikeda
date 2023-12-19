@@ -44,6 +44,18 @@ app.get("/customer", async (req, res) => {
   }
 });
 
+app.get("/customer-id", async (req, res) => {
+  try {
+    // クエリパラメータの取得
+    const { customerId } = req.query;
+    const customerData = await pool.query("SELECT * FROM customers WHERE customer_id = $1", [customerId]);
+    res.send(customerData.rows);
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+});
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -66,6 +78,18 @@ app.delete("/delete-customer", async (req, res) => {
     // クエリパラメータの取得
     const { companyName } = req.query;
     const customerData = await pool.query("DELETE FROM customers WHERE company_name = $1", [companyName]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+});
+
+app.patch("/update-customer", async (req, res) => {
+  try {
+    // クエリパラメータの取得
+    const { companyName, industry, contact, location, customerId } = req.query;
+    const customerData = await pool.query("UPDATE customers SET company_name = $1, industry = $2, contact = $3, location = $4 WHERE customer_id = $5;", [companyName, industry, contact, location, customerId]);
     res.json({ success: true });
   } catch (err) {
     console.error(err);
