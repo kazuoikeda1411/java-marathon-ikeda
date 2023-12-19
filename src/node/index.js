@@ -61,4 +61,16 @@ app.post("/add-customer", async (req, res) => {
   }
 });
 
+app.delete("/delete-customer", async (req, res) => {
+  try {
+    // クエリパラメータの取得
+    const { companyName } = req.query;
+    const customerData = await pool.query("DELETE FROM customers WHERE company_name = $1", [companyName]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+});
+
 app.use(express.static("public"));

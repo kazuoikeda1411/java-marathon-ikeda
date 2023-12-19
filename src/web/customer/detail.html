@@ -26,6 +26,7 @@
                 <!-- 顧客データはここに挿入されます -->
             </tbody>
         </table>
+        <button id="delete-button">削除</button>
     </div>
 
     <script type="module">
@@ -62,6 +63,30 @@
                 });
             })
             .catch((error) => console.error(error));
+        document.getElementById('delete-button').addEventListener('click', function () {
+            // 確認メッセージを表示
+            const confirmDelete = confirm('本当に削除しますか？');
+
+            // OKがクリックされた場合の処理
+            if (confirmDelete) {
+                // 削除処理を実行
+                fetch(config.apiUrl + `/delete-customer?companyName=${companyName}`, {
+                    method: 'DELETE'
+                }).then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log('顧客情報が正常に削除されました。');
+                            window.location.href = 'http://localhost/';
+                        } else {
+                            alert('削除に失敗しました。');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                // キャンセル時の処理
+                console.log('削除がキャンセルされました');
+            }
+        });
     </script>
 
     <!-- BootstrapのJavaScriptと依存関係のリンク -->
