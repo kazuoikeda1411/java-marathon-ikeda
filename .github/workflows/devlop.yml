@@ -7,6 +7,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - run: echo "this is pen"
       - id: ssh
         uses: invi5H/ssh-action@v1
         with:
