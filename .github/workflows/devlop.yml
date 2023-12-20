@@ -1,9 +1,8 @@
 name: ssh command
 on:
-  [push]
-  # push:
-  #   branches:
-  #     - develop
+  push:
+    branches:
+      - develop
 jobs:
   test:
     runs-on: ubuntu-latest
