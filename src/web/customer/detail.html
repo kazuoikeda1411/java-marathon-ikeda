@@ -81,7 +81,7 @@
                     .then(data => {
                         if (data.success) {
                             console.log('顧客情報が正常に削除されました。');
-                            window.location.href = 'http://localhost/';
+                            window.location.href = '/kazuo_ikeda/';
                         } else {
                             alert('削除に失敗しました。');
                         }
@@ -95,7 +95,7 @@
 
         document.getElementById('update-button').addEventListener('click', function () {
             const customerId = document.querySelector("#customer-list tr:first-child td:first-child").textContent;
-            window.location.href = `/customer/update.html?customerId=${customerId}`;
+            window.location.href = `/kazuo_ikeda/customer/update.html?customerId=${customerId}`;
         });
     </script>
 
