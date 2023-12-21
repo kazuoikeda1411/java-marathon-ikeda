@@ -6,10 +6,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    outputs:
-      steps: ${{ steps.*.outputs }}
     steps:
-      - name: ステージングへのSSH接続
+      - name: ssh connect to staging
         id: ssh_staging
         uses: invi5H/ssh-action@v1
         with:
@@ -18,8 +16,10 @@ jobs:
           SSH_USER: ${{ secrets.DEV_SSH_USER }}
           SSH_KEY: ${{ secrets.DEV_SSHE_SSH_KEY }}
       - name: Run test in Staging
-        run: ssh ${{ steps.ssh_staging.outputs.SERVER }} bash /app/deploy.sh kazuo_ikeda
-      - name: プロダクションへのSSH接続
+        run: |
+          ssh ${{ steps.ssh_staging.outputs.SERVER }} bash /app/deploy.sh kazuo_ikeda
+          echo "SERVER_NAME=${{ steps.ssh_staging.outputs.SERVER }}" >> $GITHUB_ENV
+      - name: ssh connect to production
         id: ssh_production
         uses: invi5H/ssh-action@v1
         with:
@@ -28,8 +28,9 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_KEY: ${{ secrets.SSHE_SSH_KEY }}
       - name: Deploy to Production, if the test is successful
-        run: echo "success!"
-        if: ${{ success() }}
-      - name: Handle failure
-        run: echo "test failed!"
-        if: ${{ failure() }}
+        run: |
+          if [[ "${{ env.SERVER_NAME }}" == "staging-server" ]]; then
+            echo "Running deployment to production..."
+          else
+            echo "Skipping deployment to production due to failed test in staging."
+          fi
