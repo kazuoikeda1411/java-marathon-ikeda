@@ -20,5 +20,5 @@ jobs:
         run: echo "Deploy step succeeded!"
         if: ${{ success() }}
       - name: Handle failure
-        run: echo "Deploy step failed!"
+        run: echo "test failed!"
         if: ${{ failure() }}
