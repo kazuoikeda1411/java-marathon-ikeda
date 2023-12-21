@@ -1,5 +1,5 @@
 const config = {
-  apiUrl: 'http://localhost:3508'
+  apiUrl: '/api_kazuo_ikeda'
 };
 
 export default config;
