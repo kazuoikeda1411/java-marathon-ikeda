@@ -27,5 +27,5 @@ jobs:
           SSH_KEY: ${{ secrets.SSHE_SSH_KEY }}
         if: ${{ success() }}
       - name: Deploy to Production, if the test is successful
-        run: echo "success!"
+        run: ssh ${{ steps.ssh_production.outputs.SERVER }} bash /app/deploy.sh kazuo_ikeda
         if: ${{ success() }}
